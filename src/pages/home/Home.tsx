@@ -1,68 +1,38 @@
+import React from 'react';
 
-function Home() {
+const heroImageUrl: string = "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=800&auto=format&fit=crop";
+
+export const Home: React.FC = () => {
   return (
-    <>
-        <div style={{
-            backgroundColor: "#312e81",
-            display: "flex",
-            justifyContent: "center"
-        }}>
-            <div style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                color: "white",
-                width: "100%",
-                maxWidth: "1280px",
-            }}>
-                <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "1rem",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    paddingTop: "1rem",
-                    paddingBottom: "1rem"
-                }}>
-                    <h2 style={{
-                        fontSize: "3rem",
-                        fontWeight: "bold"
-                    }}>
-                        Welcome to our community!
-                    </h2>
-                    <p style={{
-                        fontSize: "1.25rem"
-                    }}>
-                        Share your thoughts here
-                    </p>
-                    <div style={{
-                        display: "flex",
-                        justifyContent: "space-around",
-                        gap: "1rem"
-                    }}>
-                        <div style={{
-                            borderRadius: "0.5rem",
-                            color: "white",
-                            border: "2px solid white",
-                            padding: "0.5rem 1rem"
-                        }}> 
-                            New Post 
-                        </div>
-                    </div>
-                </div>
-                <div style={{
-                    display: "flex",
-                    justifyContent: "center"
-                }}>
-                    <img src="http://i.imgur.com//fyfri1v.png"
-                    alt="Home page image"
-                    style={{
-                        width: "66%"
-                    }}/>
-                </div>
-            </div>
+    <main className="min-h-screen bg-zinc-50 pt-28 pb-20 px-6 md:px-10">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+        
+        {/* Left Text Content */}
+        <div className="md:w-1/2 space-y-6">
+          <h1 className="text-6xl md:text-7xl font-extrabold text-zinc-950 leading-tight tracking-tight">
+            Welcome to Our<br />Community
+          </h1>
+          <p className="text-2xl text-zinc-600 max-w-xl">
+            Share Your thoughts here. A place for readers and writers to connect.
+          </p>
+          <button className="bg-zinc-950 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-zinc-800 transition duration-300 shadow-lg">
+            Explore Posts
+          </button>
         </div>
-    </>
-  )
-}
 
-export default Home
+        {/* Right Image Content */}
+        <div className="md:w-1/2 flex justify-center md:justify-end relative">
+          <div className="absolute -bottom-6 -left-6 w-72 h-72 bg-blue-100 rounded-3xl opacity-50 filter blur-2xl"></div>
+          
+          <img 
+            src={heroImageUrl} 
+            alt="Person writing in a notebook" 
+            className="relative rounded-3xl shadow-2xl object-cover w-full max-w-lg h-auto aspect-[4/5] border-4 border-white"
+            style={{ objectPosition: 'center top' }}
+          />
+        </div>
+        
+      </div>
+    </main>
+  );
+};
