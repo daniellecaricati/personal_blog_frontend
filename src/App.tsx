@@ -10,16 +10,19 @@ import { Login } from './pages/login/Login';
 const App: React.FC = () => {
   return (
     <BrowserRouter>
-      <Navbar />
-          <div className="flex flex-col min-h-screen">
-              <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="/home" element={<Home />} />
-                <Route path="/profile" element={<Profile />} />
-                
-              </Routes>
+      <div className="flex flex-col min-h-screen bg-zinc-50">
+        <Navbar />
+        
+          <div className="flex-grow">
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/profile" element={<Profile />} />                
+            </Routes>
           </div>
-      <Footer />
+
+        <Footer />
+      </div>    
     </BrowserRouter>
   );
 }

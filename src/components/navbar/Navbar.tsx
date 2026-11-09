@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 export const Navbar = () => {
  
-  const userAvatarUrl = "https://randomuser.me/api/portraits/women/44.jpg";
+  const userAvatarUrl: string = "https://randomuser.me/api/portraits/women/44.jpg";
 
   return (
     // Fixed, floating navbar with shadow and blur effect
@@ -12,15 +12,14 @@ export const Navbar = () => {
         
 
         <div className="text-2xl font-bold text-zinc-950 tracking-tight"> 
-          <Link to='/home' className="text-2xl font-bold">Personal Blog</Link>
+          <Link to='/' className="text-2xl font-bold">Personal Blog</Link>
         </div>
 
-
         <ul className="flex items-center gap-10 text-lg font-medium text-zinc-700">
-          <li><a href="#" className="text-zinc-950 font-semibold">Posts</a></li>
-          <li><a href="#" className="hover:text-zinc-950 transition">Themes</a></li>
-          <li><a href="#" className="hover:text-zinc-950 transition">Create Theme</a></li>
-          <li><a href="#" className="hover:text-zinc-950 transition">Profile</a></li>
+          <li><a href="/posts" className="hover:text-zinc-950 font-semibold">Posts</a></li>
+          <li><a href="/themes" className="hover:text-zinc-950 transition">Themes</a></li>
+          <li><a href="create-theme" className="hover:text-zinc-950 transition">Create Theme</a></li>
+          <li><a href="/profile" className="hover:text-zinc-950 transition">Profile</a></li>
         </ul>
 
         {/* User Profile Section */}
@@ -30,9 +29,9 @@ export const Navbar = () => {
             alt="User Profile" 
             className="w-11 h-11 rounded-full object-cover border-2 border-zinc-100"
           />
-          <button className="text-lg font-medium text-zinc-700 hover:text-red-600 transition">
+          <Link to="/login" className="text-lg font-medium text-zinc-700 hover:text-red-600 transition">
             Exit
-          </button>
+          </Link>
         </div>
 
       </nav>
