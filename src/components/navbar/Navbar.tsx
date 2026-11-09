@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export const Navbar = () => {
  
@@ -10,8 +11,8 @@ export const Navbar = () => {
       <nav className="max-w-7xl mx-auto bg-white/90 backdrop-blur-sm border border-zinc-100 rounded-full px-8 py-4 shadow-xl flex items-center justify-between">
         
 
-        <div className="text-2xl font-bold text-zinc-950 tracking-tight">
-          Personal Blog
+        <div className="text-2xl font-bold text-zinc-950 tracking-tight"> 
+          <Link to='/home' className="text-2xl font-bold">Personal Blog</Link>
         </div>
 
 
