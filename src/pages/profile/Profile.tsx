@@ -1,23 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, Lock, Image as ImageIcon } from '@phosphor-icons/react';
+import { useNavigate } from 'react-router-dom';
+import { ClipLoader } from 'react-spinners';
+import { createUser } from '../../services/Service';
+import type UserModel from '../../models/User'; //Alias to User.ts from models/User
+
 
 export const Profile: React.FC = () => {
-    const [formData, setFormData] = useState({
+
+    const navigate = useNavigate();
+
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const[confirmPassword, setConfirmPassword] = useState<string>('');
+    const[error, setError]= useState<string>('');
+
+    const[user, setUser] = useState<UserModel>({
+        id:0,
         name: '',
         username: '',
-        photo: '',
         password: '',
-        confirmPassword: '',
+        photo: '',
+        post: null,
     });
 
+    useEffect(() => {
+        if(user.id !== 0) {
+            handleRedirect();
+        }
+    }, [user]);
+
+    function handleRedirect() {
+        navigate('/login');
+    }
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        setUser({ ...user, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        console.log('Profile data submitted:', formData);
-    };
+   const handleConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setConfirmPassword(e.target.value);
+   }
+
+   async function handleCreateUser(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError('');
+
+    if (confirmPassword === user.password && user.password.length >= 8) {
+        setIsLoading(true);
+        try {
+            await createUser('/users/create', user, setUser);
+            alert('User created successfully!');
+        } catch (err) {
+            console.error('Error creating user:', err);
+            alert('Error processing registration! User may already exist.');
+            setUser({ ...user, password: ''});
+            setConfirmPassword('');
+        }
+        setIsLoading(false);
+    } else {
+        setError('Inconsistent data! Passwords must match and be at least 8 characters long.');
+        setUser({...user, password:''});
+        setConfirmPassword('');
+    }
+   }
 
     return (
         <main className="min-h-screen bg-zinc-50 pt-32 pb-20 px-6 md:px-10 flex items-center justify-center">
@@ -54,7 +99,13 @@ export const Profile: React.FC = () => {
                         </p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-5">
+                    {error && (
+                        <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm font-medium">
+                            {error}
+                        </div>
+                    )}
+
+                    <form onSubmit={handleCreateUser} className="space-y-5">
                         
                         {/* Name */}
                         <div>
@@ -68,7 +119,7 @@ export const Profile: React.FC = () => {
                                     id="name"
                                     name="name"
                                     placeholder="Name"
-                                    value={formData.name}
+                                    value={user.name}
                                     onChange={handleChange}
                                     className="w-full pl-11 pr-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:bg-white transition" 
                                     required 
@@ -88,7 +139,7 @@ export const Profile: React.FC = () => {
                                     id="username"
                                     name="username"
                                     placeholder="username"
-                                    value={formData.username}
+                                    value={user.username}
                                     onChange={handleChange}
                                     className="w-full pl-11 pr-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:bg-white transition" 
                                     required 
@@ -108,7 +159,7 @@ export const Profile: React.FC = () => {
                                     id="photo"
                                     name="photo"
                                     placeholder="photo URL"
-                                    value={formData.photo}
+                                    value={user.photo}
                                     onChange={handleChange}
                                     className="w-full pl-11 pr-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:bg-white transition"
                                 />
@@ -127,7 +178,7 @@ export const Profile: React.FC = () => {
                                     id="password"
                                     name="password"
                                     placeholder="*********"
-                                    value={formData.password}
+                                    value={user.password}
                                     onChange={handleChange}
                                     className="w-full pl-11 pr-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:bg-white transition" 
                                     required 
@@ -147,8 +198,8 @@ export const Profile: React.FC = () => {
                                     id="confirmPassword"
                                     name="confirmPassword"
                                     placeholder="*********"
-                                    value={formData.confirmPassword}
-                                    onChange={handleChange}
+                                    value={confirmPassword}
+                                    onChange={handleConfirmPassword}
                                     className="w-full pl-11 pr-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:bg-white transition" 
                                     required 
                                 />
@@ -159,15 +210,17 @@ export const Profile: React.FC = () => {
                         <div className="flex items-center gap-4 pt-4">
                             <button
                                 type="button"
+                                onClick={handleRedirect}
                                 className="w-1/2 border border-zinc-300 text-zinc-700 font-semibold py-3.5 px-6 rounded-xl hover:bg-zinc-100 transition duration-300 text-center"
                             >
                                 Cancel
                             </button>
                             <button 
                                 type="submit"
-                                className="w-1/2 bg-zinc-950 text-white font-semibold py-3.5 px-6 rounded-xl hover:bg-zinc-800 transition duration-300 shadow-lg text-center"
+                                disabled={isLoading}
+                                className="w-1/2 bg-zinc-950 text-white font-semibold py-3.5 px-6 rounded-xl hover:bg-zinc-800 transition duration-300 shadow-lg text-center flex items-center justify-center"
                             >
-                                Create
+                                {isLoading ? <ClipLoader color="#ffffff" size={20} /> : <span>Create</span>}
                             </button>
                         </div>
 
